@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-only
+
+/dts-v1/;
+
+#include <skeleton.dtsi>
+
+/ {
+	// This is used by the bootloader to find the correct DTB
+	compatible = "sony,flamingo", "qcom,msm8226-mtp", "qcom,msm8226", "qcom,mtp", "lk2nd,device";
+	qcom,msm-id = <145 0x20000>, <158 0x20000>, <159 0x20000>, <198 0x20000>, <205 0x20000>, <220 0x20000>, <221 0x20000>, <222 0x20000>, <223 0x20000>;
+	qcom,board-id = <8 0>;
+
+	model = "Sony Xperia E3";
+};

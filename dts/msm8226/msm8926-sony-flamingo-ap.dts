@@ -11,4 +11,6 @@
 	qcom,board-id = <8 0>;
 
 	model = "Sony Xperia E3";
+
+	lk2nd,recovery-partition-name = "FOTAKernel";
 };

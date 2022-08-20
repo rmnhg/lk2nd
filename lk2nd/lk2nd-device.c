@@ -241,6 +241,20 @@ static int lk2nd_find_device_offset(const void *fdt)
 	return offset;
 }
 
+static void lk2nd_get_recovery_partition_name(const void *fdt, int offset)
+{
+	int len;
+	const char *val = malloc(256 * sizeof(char));
+
+	val = fdt_getprop(fdt, offset, "lk2nd,recovery-partition-name", &len);
+	if (val && len > 0) {
+		*(&lk2nd_dev.recpartname) = strdup(val);
+		dprintf(INFO, "A custom recovery partition name has been assigned: %s\n", val);
+	} else {
+		lk2nd_dev.recpartname = strdup("recovery");
+	}
+}
+
 static const char *lkfdt_getprop_str(const void *fdt, int offset, const char *prop, int *len)
 {
 	const char *val;
@@ -355,6 +369,8 @@ static void lk2nd_parse_device_node(const void *fdt)
 #if TARGET_MSM8916
 	smb1360_detect_battery(fdt, offset);
 #endif
+
+	lk2nd_get_recovery_partition_name(fdt, offset);
 }
 
 #ifdef LK1ST_DTB

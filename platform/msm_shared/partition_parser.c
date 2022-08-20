@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <crc32.h>
+#include <lk2nd.h>
 #include "mmc.h"
 #include "partition_parser.h"
 #define GPT_HEADER_SIZE 92
@@ -943,12 +944,20 @@ mbr_fill_name(struct partition_entry *partition_ent, unsigned int type)
 }
 
 /*
- * Find index of parition in array of partition entries
+ * Find index of partition in array of partition entries
  */
 int partition_get_index(const char *name)
 {
 	unsigned int input_string_length = strlen(name);
 	unsigned n;
+	char finalName[256];
+
+	if (!strcmp(name, "recovery")) {
+		strcpy(finalName, lk2nd_dev.recpartname);
+		input_string_length = strlen(finalName);
+	} else {
+		strcpy(finalName, name);
+	}
 
 	if( partition_count >= NUM_PARTITIONS)
 	{
@@ -956,7 +965,7 @@ int partition_get_index(const char *name)
 	}
 	for (n = 0; n < partition_count; n++) {
 		if ((input_string_length == strlen((const char *)&partition_entries[n].name))
-			&& !memcmp(name, &partition_entries[n].name, input_string_length)) {
+			&& !memcmp(finalName, &partition_entries[n].name, input_string_length)) {
 			return n;
 		}
 	}
